@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        header {
+            background-color: #Fe5005;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        #payment-options {
+            padding: 20px;
+            text-align: center;
+        }
+        .payment-option {
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .payment-option button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        .payment-option button:hover {
+            background-color: #ddd; /* Change color on hover */
+        }
+        .hidden {
+            display: none;
+        }
+        .input-field {
+            margin: 10px 0;
+        }
+        select, input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Payment Options</h1>
+    </header>
+    <main id="payment-options">
+        <div class="payment-option">
+            <h2>Pay with QR Code</h2>
+            <p>Scan the QR code to pay: <strong id="payment-amount"></strong></p>
+            <img id="qr-code" src="" alt="QR Code" style="max-width: 200px; display: none;">
+            <button onclick="generateQRCode()">Generate QR Code</button>
+        </div>
+        <div class="payment-option">
+            <h2>Pay with UPI</h2>
+            <div class="input-field">
+                <label for="upi-id">Enter UPI ID:</label>
+                <input type="text" id="upi-id" placeholder="Enter your UPI ID" />
+            </div>
+            <button onclick="payWithUPI()">Pay via UPI</button>
+        </div>
+        <div class="payment-option">
+            <h2>Pay with Bank Account</h2>
+            <button onclick="toggleBankDetails()">Pay via Bank Transfer</button>
+            <div id="bank-details" class="hidden">
+                <div class="input-field">
+                    <label for="account-number">Account Number:</label>
+                    <input type="text" id="account-number" placeholder="Enter Account Number">
+                </div>
+                <div class="input-field">
+                    <label for="holder-name">Account Holder Name:</label>
+                    <input type="text" id="holder-name" placeholder="Enter Holder Name">
+                </div>
+                <div class="input-field">
+                    <label for="ifsc-code">Select Bank:</label>
+                    <select id="ifsc-code">
+                        <option value="" disabled selected>Select Bank</option>
+                        <option value="ICICI">ICICI Bank</option>
+                        <option value="HDFC">HDFC Bank</option>
+                        <option value="SBI">State Bank of India</option>
+                    </select>
+                </div>
+                <button onclick="payWithBank()">Confirm Bank Transfer</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // JavaScript to handle payment page functionality
+        const urlParams = new URLSearchParams(window.location.search);
+        const productName = decodeURIComponent(urlParams.get('name'));
+        const productPrice = decodeURIComponent(urlParams.get('discountPrice')); // Assuming this is the price
+
+        // Display the product price
+        document.getElementById('payment-amount').innerText = `₹${productPrice}`;
+
+        // Generate QR code function
+        function generateQRCode() {
+            const qrCodeImageUrl = `https://api.qrserver.com/v1/create-qr-code/?data=Pay%20₹${productPrice}&size=200x200`; // Example QR code API
+            document.getElementById('qr-code').src = qrCodeImageUrl;
+            document.getElementById('qr-code').style.display = 'block'; // Show the QR code
+        }
+
+        // Function to handle UPI payment
+        function payWithUPI() {
+            const upiId = document.getElementById('upi-id').value;
+            if (upiId) {
+                alert(`Redirecting to UPI payment with ID: ${upiId}`);
+                // Add logic to redirect or handle UPI payment
+            } else {
+                alert('Please enter your UPI ID.');
+            }
+        }
+
+        // Toggle bank details visibility
+        function toggleBankDetails() {
+            const bankDetails = document.getElementById('bank-details');
+            bankDetails.classList.toggle('hidden');
+        }
+
+        // Function to handle bank transfer
+        function payWithBank() {
+            const accountNumber = document.getElementById('account-number').value;
+            const holderName = document.getElementById('holder-name').value;
+            const selectedBank = document.getElementById('ifsc-code').value;
+
+            if (accountNumber && holderName && selectedBank) {
+                alert(`Processing bank transfer:\nAccount Number: ${accountNumber}\nHolder Name: ${holderName}\nBank: ${selectedBank}`);
+                // Add logic to process bank transfer
+            } else {
+                alert('Please fill in all bank details.');
+            }
+        }
+    </script>
+</body>
+</html>

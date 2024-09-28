@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech-to-Text Search</title>
+    <style>
+        #search-bar {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #mic-btn {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Speech-to-Text Search</h1>
+
+    <input type="text" id="search-bar" placeholder="Search here...">
+    <button id="mic-btn">🎤</button>
+
+    <script>
+   
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+
+     
+        recognition.continuous = false;
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        const searchBar = document.getElementById("search-bar");
+        const micButton = document.getElementById("mic-btn");
+
+       
+        micButton.addEventListener("click", () => {
+            recognition.start();
+        });
+
+        
+        recognition.onresult = (event) => {
+            const speechResult = event.results[0][0].transcript;
+            searchBar.value = speechResult;  
+            console.log("Speech recognized: " + speechResult);
+
+           
+        };
+
+   
+        recognition.onspeechstart = () => {
+            console.log("Speech has been detected.");
+        };
+
+      
+        recognition.onspeechend = () => {
+            recognition.stop();
+            console.log("Speech recognition stopped.");
+        };
+
+        recognition.onerror = (event) => {
+            console.error("Speech recognition error detected: " + event.error);
+        };
+    </script>
+
+</body>
+</html>
