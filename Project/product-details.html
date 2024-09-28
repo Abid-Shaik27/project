@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9; /* Light background color for contrast */
+            color: #333;
+        }
+
+        header {
+            background-color: #Fe5005; /* Header background color */
+            color: white; /* Header text color */
+            padding: 20px;
+            text-align: center;
+        }
+
+        #product-details {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .product-detail-card {
+            max-width: 600px;
+            width: 100%; /* Makes it responsive */
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .product-detail-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px 10px 0 0; /* Round corners at the top */
+        }
+
+        .product-detail-card h2 {
+            margin: 15px 0 10px;
+        }
+
+        .product-detail-card p {
+            margin: 5px 0;
+        }
+
+        .custom-buy-now {
+            background-color: orange;
+            color: white;
+            padding: 12px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 80%; /* Width of the button */
+            margin: 20px auto; /* Center the button */
+            display: block; /* Make the button a block element */
+        }
+
+        .custom-buy-now:hover {
+            background-color: #FF1A1A; /* Darker red on hover */
+        }
+
+        #back-button {
+            background-color: #333;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        #back-button:hover {
+            background-color: #555; /* Darker gray on hover */
+        }
+
+        /* Modal Styles */
+        #modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
+        }
+
+        #modal-content {
+            margin: 15% auto; /* 15% from the top and centered */
+            width: 80%; /* Could be more or less, depending on screen size */
+            background: white; /* Background color of the modal */
+            border-radius: 10px; /* Rounded corners */
+            overflow: hidden; /* Prevent overflow */
+        }
+
+        .close {
+            color: #aaa; /* Close button color */
+            float: right; /* Align close button to the right */
+            font-size: 28px; /* Close button size */
+            font-weight: bold; /* Close button bold */
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black; /* Close button hover color */
+            text-decoration: none; /* No underline on hover */
+            cursor: pointer; /* Pointer cursor on hover */
+        }
+
+        canvas {
+            width: 100%; /* Make canvas responsive */
+            height: 400px; /* Set a fixed height */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Product Details</h1>
+        <button id="back-button">Back</button>
+    </header>
+    <main id="product-details">
+        <!-- Product details will be dynamically inserted here -->
+    </main>
+
+    <!-- 3D Model Modal -->
+    <div id="modal">
+        <div id="modal-content">
+            <span class="close" id="close-modal">&times;</span>
+            <canvas id="threejs-canvas"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
+    <script>
+        // JavaScript to extract URL parameters and display product details
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = decodeURIComponent(urlParams.get('name'));
+        const description = decodeURIComponent(urlParams.get('description'));
+        const mrp = decodeURIComponent(urlParams.get('mrp'));
+        const discountPrice = decodeURIComponent(urlParams.get('discountPrice'));
+        const img = decodeURIComponent(urlParams.get('img'));
+        const modelURL = decodeURIComponent(urlParams.get('modelURL')); // Add model URL parameter
+
+        const productDetails = document.getElementById('product-details');
+        productDetails.innerHTML = `
+            <div class="product-detail-card">
+                <img src="${img}" alt="${name}">
+                <h2>${name}</h2>
+                <p>${description}</p>
+                <p>MRP: <s>${mrp}</s></p>
+                <p>Discounted Price: <strong>${discountPrice}</strong></p>
+                <button class="custom-buy-now" id="proceed-buy">Proceed to Buy</button>
+                <button class="custom-buy-now" id="view-3d">View 3D</button> <!-- Added View 3D button -->
+            </div>
+        `;
+
+        // Back button functionality
+        document.getElementById('back-button').addEventListener('click', () => {
+            window.history.back();
+        });
+
+        // Proceed to buy functionality
+        document.getElementById('proceed-buy').addEventListener('click', () => {
+            // Redirect to the payment page (change the URL to your payment page)
+            window.location.href = 'payment.html?productName=' + encodeURIComponent(name) + '&price=' + encodeURIComponent(discountPrice);
+        });
+
+        // Modal and 3D View functionality
+        const modal = document.getElementById("modal");
+        const closeModal = document.getElementById("close-modal");
+
+        document.getElementById('view-3d').addEventListener('click', () => {
+            modal.style.display = "block";
+            init3DView(modelURL); // Initialize 3D view with the model URL
+        });
+
+        closeModal.onclick = function() {
+            modal.style.display = "none";
+            // Clean up the canvas
+            const canvas = document.getElementById('threejs-canvas');
+            const context = canvas.getContext('webgl') || canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Function to initialize the 3D view
+        function init3DView(modelURL) {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('threejs-canvas') });
+            renderer.setSize(window.innerWidth, 400); // Set size of the renderer
+            document.body.appendChild(renderer.domElement);
+
+            // Load the 3D model
+            const loader = new THREE.GLTFLoader();
+            loader.load(modelURL, (gltf) => {
+                scene.add(gltf.scene);
+                camera.position.z = 5;
+
+                // Animate the scene
+                const animate = function () {
+                    requestAnimationFrame(animate);
+                    gltf.scene.rotation.y += 0.01; // Rotate model for better view
+                    renderer.render(scene, camera);
+                };
+                animate();
+            });
+        }
+    </script>
+</body>
+</html>

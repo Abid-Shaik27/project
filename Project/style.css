@@ -1,0 +1,179 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Day Mode Styles */
+body {
+    background-color: white;
+    color: black;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.header {
+    background-color: #ffffff;
+    color: #Fe5005;
+    padding: 10px;
+    text-align: center;
+    position: sticky;
+}
+
+.main-content {
+    padding: 1px;
+}
+
+.product-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-card img {
+    max-width: 100%;
+    border-radius: 10px 10px 0 0;
+    height: 200%;
+    object-fit: cover;
+}
+
+.footer {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 40px 0;
+    margin-top: 20px;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: nowrap;
+}
+
+.footer-logo img {
+    width: 250px;
+    margin-bottom: 10px;
+}
+
+.footer-section {
+    flex-grow: 1;
+    padding: auto;
+}
+
+.footer-section ul {
+    list-style-type: none;
+}
+
+.footer-section ul li {
+    margin-bottom: 0;
+}
+
+.footer-section ul li a {
+    color: #999;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.footer-section ul li a:hover {
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-section {
+        margin-bottom: 30px;
+    }
+
+    .footer-logo {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        flex-basis: 20%;
+    }
+
+    .footer-section ul {
+        justify-content: center;
+    }
+}
+
+.footer-logo img {
+    height: 150px;
+    width: 150px;
+}
+
+/* Night Mode Styles */
+body.night-mode {
+    background-color: #121212;
+    color: white;
+}
+
+.header.night-mode {
+    background-color: #1c1c1c;
+}
+
+.product-card.night-mode {
+    background-color: #222;
+    color: white;
+    border: 1px solid #444;
+}
+
+.product-description.night-mode {
+    color: #ccc;
+}
+
+/* Toggle Button Styles */
+#toggleButton {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+#search-form {
+    display: flex;
+    align-items: center;
+    size: 50px;
+}
+
+#search-bar {
+    flex: 12; /* This allows the search bar to take up the remaining space */
+    margin-right: 15px; /* Increased margin to create more space between the search bar and mic button */
+    min-width: 200px; /* Optional: Set a minimum width for the search bar */
+}
+
+#mic-btn {
+    margin-right: 10px; /* This margin maintains space between the mic button and the search button */
+}
+
+.custom-buy-now {
+    background-color: orange;
+    color: white;
+    padding: 12px 0; /* Modified to make it fill the width */
+    font-size: 18px;
+    border: none;
+    border-radius: 0 0 5px 5px; /* Rounded corners at the bottom */
+    transition: background-color 0.3s;
+    width: 100%; /* Ensures the button fills the card width */
+    display: block; /* Makes button act as a block element */
+    text-align: center; /* Centers the button text */
+}
+
+/* Optional: Add hover effects */
+.custom-buy-now:hover {
+    background-color: #FF1A1A; /* Darker red on hover */
+}
+
+.custom-add-to-cart:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}

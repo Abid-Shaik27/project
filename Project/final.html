@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revshop Buyer Dashboard</title>
+    <link rel="icon" href="REVshopicon.png" type="image/png"> <!-- Updated line for favicon -->
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" style="background-color: rgb(78, 10, 37);">
+    <button id="toggleButton" class="btn btn-outline-secondary me-2"><i class="fas fa-adjust"></i></button>
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="REVshopicon.png" alt="Revshop Icon" style="width: 30px; height: 30px; margin-right: 8px;">
+            Revshop
+        </a>
+        <form class="d-flex" id="search-form">
+            <input type="text" id="search-bar" class="form-control me-2" placeholder="Search products..." aria-label="Search">
+            <button id="mic-btn" class="btn btn-outline-success" type="button">
+                <i class="fas fa-microphone"></i> <!-- Font Awesome Microphone Icon -->
+            </button>
+            <button class="btn btn-outline-primary" type="submit">Search</button>
+        </form>
+        
+        
+    </div>
+</nav>
+
+<!-- Header -->
+<div class="header text-center">
+    <h1 >Welcome to Revshop</h1>
+</div>
+
+<!-- Main Content -->
+<div class="main-content container mt-5">
+    <h2>Products</h2>
+    <div class="row" id="product-list">
+        <!-- Example Product Card -->
+        <div class="col-md-4">
+            <div class="card product-card" data-product-id="1" onclick="viewProduct(this)">
+                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Product Image">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Product Name</h5>
+                    <p class="card-text">Product Description</p>
+                    <button class="btn btn-primary mt-auto w-100" onclick="showProductDetails(event, this)">Buy Now</button>
+                </div>
+            </div>
+        </div>
+        <!-- Add more product cards as needed -->
+    </div>
+
+    <!-- Product Details Section -->
+    <div id="product-details" style="display:none;" class="mt-5">
+        <h3>Product Details</h3>
+        <img id="detail-image" src="" alt="Product Image" style="width:150px;">
+        <h4 id="detail-name"></h4>
+        <p id="detail-description"></p>
+        <p id="detail-price"></p>
+        <button class="btn btn-success" onclick="proceedToBuy()">Proceed to Buy</button>
+        <button class="btn btn-secondary" onclick="closeDetails()">Close</button>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-logo">
+            <img src="./RevShop-removebg-preview.png" alt="Logo">
+        </div>
+        <div class="footer-section">
+            <h4>Categories</h4>
+            <ul>
+                <li><a href="#">Electronics</a></li>
+                <li><a href="#">Clothing</a></li>
+                <li><a href="#">Toys</a></li>
+                <li><a href="#">Beauty and Grooming</a></li>
+                <li><a href="#">More Categories</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>We Deliver To</h4>
+            <ul>
+                <li><a href="#">Delhi</a></li>
+                <li><a href="#">Mumbai</a></li>
+                <li><a href="#">Jaipur</a></li>
+                <li><a href="#">Kochi</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Company</h4>
+            <ul>
+                <li><a href="#">About</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Contact</h4>
+            <ul>
+                <li><a href="#">Help & Support</a></li>
+                <li><a href="#">Partner with Us</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<!-- JavaScript -->
+<script src="script1.js"></script>
+<script>
+    // Function to show product details when the Buy Now button is clicked
+    function showProductDetails(event, element) {
+        event.stopPropagation(); // Prevent the card click event
+        const productId = element.closest('.product-card').getAttribute('data-product-id'); 
+        const productName = element.closest('.product-card').querySelector('.card-title').textContent;
+        const productDescription = element.closest('.product-card').querySelector('.card-text').textContent;
+        const productImage = element.closest('.product-card').querySelector('img').src;
+        const productPrice = '100'; // Set your price dynamically here
+
+        // Populate the product details section
+        document.getElementById('detail-image').src = productImage;
+        document.getElementById('detail-name').textContent = productName;
+        document.getElementById('detail-description').textContent = productDescription;
+        document.getElementById('detail-price').textContent = `Price: $${productPrice}`;
+
+        // Show the product details section
+        document.getElementById('product-details').style.display = 'block';
+    }
+
+    // Function to proceed to buy (You can define your own logic here)
+    function proceedToBuy() {
+        alert('Proceeding to buy the product!'); // Placeholder action
+    }
+
+    // Function to close the product details section
+    function closeDetails() {
+        document.getElementById('product-details').style.display = 'none';
+    }
+</script>
+</body>
+</html>
